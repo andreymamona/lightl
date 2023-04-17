@@ -1,0 +1,18 @@
+{% load static %}
+
+<div class="card" style="width: 18rem;">
+    <a href="products/?id={{ product.id }}">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="rounded card-img-top"
+                 style="height: 178px; object-fit: scale-down" alt="image">
+        {% else %}
+            <img src="{{ 'img/image_item_default.png' }}" class="rounded card-img-top"
+                 style="height: 178px; object-fit: scale-down" alt="image">
+        {% endif %}
+    </a>
+    <div class="card-body">
+        <b><p class="card-text">{{ product.title }}</p></b>
+        <p class="card-text">Category: {{ product.category }}</p>
+        <p class="card-text">Price: {{ product.price }}</p>
+    </div>
+</div>

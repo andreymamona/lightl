@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class="container mb-3">
+        <a class="btn btn-primary" href="/?sort_price=up" role="button">Sort by price +</a>
+        <a class="btn btn-primary" href="/?sort_price=down" role="button">Sort by price -</a>
+
+    </div>
+    <div class="container text-center">
+        <div class="row row-cols-3 ">
+            {% for product in products %}
+                <div class="col mb-3"> {% include "product.html" %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -14,5 +14,7 @@ __pycache__/
 *.log
 
 *.jpg
+*.JPG
+*.gif
 *.png
 *.webp
