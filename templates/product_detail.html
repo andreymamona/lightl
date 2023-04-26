@@ -1,0 +1,17 @@
+{% load static %}
+
+
+<div class="card" style="width: 26rem;">
+    <a href="product/?id={{ product.id }}">
+        <img src="{{ product.image.url }}" class="rounded card-img-top"
+             style="height: 300px; object-fit: scale-down" alt="image">
+    </a>
+    <div class="card-body">
+        <b><p class="card-text">{{ product.title }}</p></b>
+        <p class="card-text">Category: {{ product.category }}</p>
+        <p class="card-text">
+            Description: <a href="https://{{ product.description }}"> {{ product.description }} </a>
+        </p>
+        <p class="card-text">Price: {{ product.price }}</p>
+    </div>
+</div>

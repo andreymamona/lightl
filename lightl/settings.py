@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("MY_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = []
 
@@ -62,8 +62,7 @@ ROOT_URLCONF = 'lightl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,12 +84,29 @@ WSGI_APPLICATION = 'lightl.wsgi.application'
 DATABASES = {
    "default": {
        "ENGINE": "django.db.backends.postgresql",
-       "NAME": "lightl",
-       "USER": "lightl",
-       "PASSWORD": "lightl",
-       "HOST": "localhost",
+       "NAME": os.getenv("DATABASE_NAME", "lightl"),
+       "USER": os.getenv("DATABASE_USER", "lightl"),
+       "PASSWORD": os.getenv("DATABASE_PASSWORD", "lightl"),
+       "HOST": os.getenv("DATABASE_HOST", "localhost"),
        "PORT": 5432,
    }
+}
+
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+CACHES = {
+   "default": {
+       "BACKEND": "django.core.cache.backends.redis.RedisCache",
+       "LOCATION": f"redis://{REDIS_HOST}:6379",
+   }
+}
+
+RQ_QUEUES = {
+    'default': {
+       'HOST': REDIS_HOST,
+       'PORT': 6379,
+       'DB': 0,
+       'DEFAULT_TIMEOUT': 360,
+    },
 }
 
 # Password validation

@@ -1,11 +1,17 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from shop.models import Product
-from django.db.models import Sum, F
+from django.core.paginator import Paginator
+from django.core.cache import cache
 
 
 def index(request):
+    title = request.GET.get("title")
+
     products = Product.objects.all()
+
+    if title is not None:
+        products = products.filter(title__icontains=title)
 
     sort_price = request.GET.get("sort_price")
     if sort_price is not None:
@@ -14,11 +20,22 @@ def index(request):
         elif sort_price == 'down':
             products = products.order_by("-price")
 
+    result = cache.get(f"products-view-{title}-{sort_price}")
+    if result is not None:
+        return result
+
+    paginator = Paginator(products, 18)
+    page_number = request.GET.get("page")
+    products = paginator.get_page(page_number)
+
     context = {
         "products": products,
     }
 
-    return render(request, "index.html", context)
+    response = render(request, "index.html", context)
+    cache.set(f"products-view-{title}", response, 60 * 60)
+    return response
+    # return render(request, "index.html", context)
 
 
 def product_view(request):
@@ -30,4 +47,4 @@ def product_view(request):
     context = {
         "product": product,
     }
-    return render(request, "product.html", context)
+    return render(request, "product_detail.html", context)

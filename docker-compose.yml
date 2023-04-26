@@ -1,0 +1,48 @@
+version: '3.3'
+services:
+
+  postgres:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=lightl
+      - POSTGRES_USER=lightl
+      - POSTGRES_PASSWORD=lightl
+
+  redis:
+    image: redis:latest
+
+  django:
+    image: jamesbuxter/django-lightl:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app/
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - DATABASE_HOST=postgres
+      - DATABASE_NAME=lightl
+      - DATABASE_USER=lightl
+      - DATABASE_PASSWORD=lightl
+      - DEBUG=True
+      - MY_SECRET=secret_key
+      - REDIS_HOST=redis
+    command: |
+      python manage.py runserver 0.0.0.0:8000
+
+  worker:
+    image: jamesbuxter/django-lightl:latest
+    volumes:
+      - ./:/app/
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - POSTGRES_NAME=lightl
+      - POSTGRES_USER=lightl
+      - POSTGRES_PASS=lightl
+      - POSTGRES_HOST=postgres
+      - REDIS_HOST=redis
+    command: |
+      python shop/manage.py rqworker
