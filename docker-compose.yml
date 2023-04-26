@@ -31,18 +31,18 @@ services:
     command: |
       python manage.py runserver 0.0.0.0:8000
 
-  worker:
-    image: jamesbuxter/django-lightl:latest
-    volumes:
-      - ./:/app/
-    depends_on:
-      - postgres
-      - redis
-    environment:
-      - POSTGRES_NAME=lightl
-      - POSTGRES_USER=lightl
-      - POSTGRES_PASS=lightl
-      - POSTGRES_HOST=postgres
-      - REDIS_HOST=redis
-    command: |
-      python shop/manage.py rqworker
+#  worker:
+#    image: jamesbuxter/django-lightl:latest
+#    volumes:
+#      - ./:/app/
+#    depends_on:
+#      - postgres
+#      - redis
+#    environment:
+#      - POSTGRES_NAME=lightl
+#      - POSTGRES_USER=lightl
+#      - POSTGRES_PASS=lightl
+#      - POSTGRES_HOST=postgres
+#      - REDIS_HOST=redis
+#    command: |
+#      python shop/manage.py rqworker
